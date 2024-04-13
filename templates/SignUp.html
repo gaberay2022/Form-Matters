@@ -65,9 +65,9 @@ let password = ""
 let data = []
 
 function SubmitComplete() {
-    Name = document.getElementById("name")
-    email = document.getElementById("email")
-    password = document.getElementById("password")
+    Name = document.getElementById("name").value
+    email = document.getElementById("email").value
+    password = document.getElementById("password").value
     writedata(Name,email,password)
 }
 
@@ -94,7 +94,7 @@ function senddata(){
         }
     })
     .catch(error => console.error('Error:', error))
-    window.location.href = "Profile.html";
+    window.location.href = "Profile";
 }
     </script>
 <body>

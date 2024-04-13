@@ -76,7 +76,7 @@ def Recievedata():
         return jsonify({'error': 'No data received'})
     
 @app.route('/ModifyUserfile', methods=["POST"])
-def Recievedata():
+def RecieveUsrdata():
     data = request.json
     if data:
         file_path = "userinfo.csv"
@@ -94,19 +94,20 @@ def setname():
         file_path = "currentuser.csv"
         with open(file_path,'w') as file:
             pass
+        file.close()
         with open(file_path, 'a') as f:
             f.write(data['content'])
         return jsonify({'success': True})
     else:
         return jsonify({'error': 'No data received'})
     
-@app.route('/readname', methods=["POST"])
-def Recievedata():
+@app.route('/readname', methods=["GET"])
+def ReadData():
     data = request.json
     if data:
         file_path = "currentuser.csv"
         with open(file_path, 'r') as f:
-            file_contents = f.read()
+            file_contents = f.read().strip()
             return jsonify({'file_contents': file_contents})
     else:
         return jsonify({'error': 'No data received'})

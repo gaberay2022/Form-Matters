@@ -10,8 +10,6 @@
     <h1>Dynamic TensorFlow.js Prediction</h1>
     <div id="loading" style="display:none;">Loading model, please wait...</div>
     <div id="error" style="display:none; color: red;">Error loading the model. Please try again.</div>
-    <video id="webcam" autoplay width="640" height="480"></video> 
-    <div id="prediction"></div>
     <video id="webcam" autoplay width="640" height="480"></video>
     <div id="prediction"></div>
     
@@ -26,7 +24,7 @@
             } else if (modelType === 'model_curl.json') {
                 modelPath = `/static/model2/${modelType}`; // Path for model_curl.json
             } else {
-                modelPath = `/static/model/model_jab.json`; // Default model path
+                modelPath = `/static/model/default_model.json`; // Default model path
             }
             
             console.log('Loading model from:', modelPath);
@@ -49,6 +47,7 @@
                 await predictLoop(model);
             }
         });
+
         async function startWebcam() {
             try {
                 const video = document.getElementById('webcam');
@@ -60,7 +59,6 @@
                 console.error('Error accessing the webcam: ', error);
             }
         }
-
 
         async function predictLoop(model) {
             const video = document.getElementById('webcam');
@@ -80,13 +78,14 @@
                                         .sub(tf.scalar(1))
                                         .expandDims();
                 const predictions = await model.predict(tensor).data();
-                return predictions; // Customize based on how your model outputs predictions
+                // Convert predictions to human-readable form
+                // Example: Assuming a single output probability
+                return predictions[0].toFixed(3);  // Show prediction probability as a string to 3 decimal places
             } catch (error) {
                 console.error("Prediction error:", error);
-                return []; // Return an empty array or some error indication
+                return 'Prediction error'; // Display a readable error
             }
         }
-
     </script>
 </body>
 </html>

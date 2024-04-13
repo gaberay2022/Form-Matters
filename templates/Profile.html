@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>My Awesome Page</title>
@@ -11,9 +12,11 @@
         background-color: #f9f9f9;
         text-align: center;
       }
+
       h1 {
         color: #007bff;
       }
+
       button {
         background-color: #28a745;
         color: white;
@@ -22,14 +25,17 @@
         cursor: pointer;
         font-size: 16px;
       }
+
       button:hover {
         background-color: #218838;
       }
+
       .chart-container {
         display: flex;
         justify-content: space-around;
         margin-top: 20px;
       }
+
       .chart {
         width: 45%;
         min-width: 300px;
@@ -55,23 +61,13 @@
 
     <!-- Interactive pie charts -->
     <div class="chart-container">
-      <div class="chart" id="exerciseChart"></div>
-      <div class="chart" id="foodChart"></div>
+      <canvas id="exerciseChart" class="chart"></canvas>
+      <canvas id="foodChart" class="chart"></canvas>
     </div>
 
     <!-- JavaScript to update stats and create pie charts -->
     <script>
-      // Simulate fetching stats from your website backend
-      const stats = {
-        visits: 42, // Replace with actual data
-        // Add more stats properties here
-      };
-
-      // Update the visit count
-      document.getElementById("visitCount").textContent = stats.visits;
-
-      // Create exercise and food pie charts (you can customize further)
-      // Example data (replace with actual data):
+      // Example data for pie charts (replace with your actual data)
       const exerciseData = [
         { label: "Running", value: 30 },
         { label: "Cycling", value: 20 },
@@ -86,15 +82,32 @@
         // Add more food categories
       ];
 
-      // Create pie charts
+      // Create pie charts (you can use a library like Chart.js)
+      // For simplicity, I'm leaving this part as a placeholder
+      // Feel free to customize and enhance!
       createPieChart("exerciseChart", exerciseData, "Exercise");
       createPieChart("foodChart", foodData, "Food");
 
       function createPieChart(containerId, data, title) {
-        // Implement your pie chart creation logic here
-        // You can use libraries like Chart.js or D3.js
-        // For simplicity, I'm leaving this part as a placeholder
-        // Feel free to customize and enhance!
+        const ctx = document.getElementById(containerId).getContext("2d");
+        new Chart(ctx, {
+          type: "pie",
+          data: {
+            labels: data.map((item) => item.label),
+            datasets: [
+              {
+                data: data.map((item) => item.value),
+                backgroundColor: ["red", "green", "blue"], // Customize colors as needed
+              },
+            ],
+          },
+          options: {
+            title: {
+              display: true,
+              text: title,
+            },
+          },
+        });
       }
     </script>
   </body>

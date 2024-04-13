@@ -54,6 +54,10 @@ def HammerCurl():
 def SwingBat():
     return render_template('SwingBat.html')
 
+@app.route('/Nutrition')
+def Nutrition():
+    return render_template('Nutrition.html')
+
 @app.route('/BasicJab')
 def BasicJab():
     return render_template('BasicJab.html')
@@ -101,16 +105,12 @@ def setname():
     else:
         return jsonify({'error': 'No data received'})
     
-@app.route('/readname', methods=["GET","POST"])
+@app.route('/readname', methods=["GET"])
 def ReadData():
-    data = request.json
-    if data:
-        file_path = "currentuser.csv"
-        with open(file_path, 'r') as f:
-            file_contents = f.read().strip()
-            return jsonify({'file_contents': file_contents})
-    else:
-        return jsonify({'error': 'No data received'})
+    file_path = "currentuser.csv"
+    with open(file_path, 'r') as f:
+        file_contents = f.read().strip()
+        return jsonify({'file_contents': file_contents})
     
 if __name__ == '__main__':
     app.run(debug=True)

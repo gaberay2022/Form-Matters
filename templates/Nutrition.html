@@ -5,25 +5,132 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MyFitnessPal Clone</title>
     <link rel="stylesheet" href="styles.css" />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #1a1a1a;
+        color: #333;
+        margin: 0;
+        padding: 0;
+      }
+
+      header {
+        background-color: #ff9900;
+        color: #fff;
+        padding: 20px;
+      }
+
+      nav ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      nav ul li {
+        display: inline;
+        margin-right: 20px;
+      }
+
+      nav ul li a {
+        color: #fff;
+        text-decoration: none;
+      }
+
+      main {
+        padding: 20px;
+      }
+
+      #log-food,
+      #nutrition {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+      }
+
+      .food-log-methods {
+        display: flex;
+        justify-content: center;
+      }
+
+      .food-log-methods button {
+        background-color: #ff9900;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        margin: 0 10px;
+        cursor: pointer;
+        border-radius: 5px;
+      }
+
+      .food-log-methods button:hover {
+        background-color: #ff9900;
+      }
+
+      .nutrients {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .nutrient {
+        text-align: center;
+      }
+
+      footer {
+        background-color: #ff9900;
+        color: #fff;
+        text-align: center;
+        padding: 10px 0;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+      }
+    </style>
   </head>
   <body>
-    <header>
-      <h1>MyFitnessPal Clone</h1>
-      <nav>
-        <ul>
-          <li><a href="#">Home</a></li>
-          <li><a href="#">Log Food</a></li>
-          <li><a href="#">Profile</a></li>
-        </ul>
-      </nav>
-    </header>
+    <center>
+      <header>
+        <h1>FormMatters Food Log</h1>
+        <nav>
+          <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Log Food</a></li>
+            <li><a href="#">Profile</a></li>
+            <li><a href="#">Nutrition</a></li>
+          </ul>
+        </nav>
+      </header>
+    </center>
 
     <main>
       <section id="log-food">
-        <h2>Log Food</h2>
+        <center>
+          <h2>Log Food</h2>
+        </center>
         <div class="food-log-methods">
           <button id="take-photo-btn">Take Photo</button>
           <button id="manual-input-btn">Manual Input</button>
+        </div>
+      </section>
+
+      <section id="nutrition">
+        <center>
+          <h2>Nutrition</h2>
+        </center>
+        <div class="nutrients">
+          <div class="nutrient">
+            <h3>Protein</h3>
+            <p>25g</p>
+          </div>
+          <div class="nutrient">
+            <h3>Carbohydrates</h3>
+            <p>50g</p>
+          </div>
+          <div class="nutrient">
+            <h3>Fat</h3>
+            <p>15g</p>
+          </div>
+          <!-- Add more nutrients as needed -->
         </div>
       </section>
     </main>

@@ -54,6 +54,10 @@ def HammerCurl():
 def SwingBat():
     return render_template('SwingBat.html')
 
+@app.route('/Nutrition')
+def Nutrition():
+    return render_template('Nutrition.html')
+
 @app.route('/BasicJab')
 def BasicJab():
     return render_template('BasicJab.html')

@@ -1,13 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>My Simple Page</title>
-  </head>
-  <body>
-    <h1>Welcome to My Page</h1>
-    <p>This is a simple HTML page.</p>
-    <a href="Home"><button>Go Home</button></a>
-  </body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic TensorFlow.js Prediction</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
+</head>
+<body>
+    <h1>Dynamic TensorFlow.js Prediction</h1>
+    <video id="webcam" autoplay width="640" height="480"></video>
+    <div id="prediction"></div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const modelType = urlParams.get('model') || 'model_jab.json'; // Use the model type from the URL parameter or default
+            
+            const modelPath = `/static/model/${modelType}`; // Construct the model path dynamically based on the model type
+            console.log('Loading model from:', modelPath);
+            const model = await tf.loadLayersModel(modelPath);
+            console.log('Model loaded');
+
+            await startWebcam();
+            await predictLoop(model);
+        });
+
+        async function startWebcam() {
+            const video = document.getElementById('webcam');
+            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+            video.srcObject = stream;
+            await new Promise(resolve => video.onloadedmetadata = resolve); // Ensure the video stream is ready
+        }
+
+        async function predictLoop(model) {
+            const video = document.getElementById('webcam');
+            while (true) {
+                const prediction = await predict(video, model);
+                document.getElementById('prediction').innerText = `Prediction: ${prediction}`;
+                await tf.nextFrame(); // Wait for the next frame
+            }
+        }
+
+        async function predict(videoElement, model) {
+            const tensor = tf.browser.fromPixels(videoElement)
+                                      .resizeNearestNeighbor([224, 224]) // Change the size to match model requirements
+                                      .toFloat()
+                                      .div(tf.scalar(127.5))
+                                      .sub(tf.scalar(1))
+                                      .expandDims();
+            const prediction = await model.predict(tensor).data();
+            return prediction; // Customize based on how your model outputs predictions
+        }
+    </script>
+</body>
 </html>

@@ -10,7 +10,7 @@
     <h1>Dynamic TensorFlow.js Prediction</h1>
     <div id="loading" style="display:none;">Loading model, please wait...</div>
     <div id="error" style="display:none; color: red;">Error loading the model. Please try again.</div>
-    <video id="webcam" autoplay width="640" height="480"></video>
+    <video id="webcam" autoplay width="640" height="480"></video> 
     <div id="prediction"></div>
     <video id="webcam" autoplay width="640" height="480"></video>
     <div id="prediction"></div>
@@ -26,7 +26,7 @@
             } else if (modelType === 'model_curl.json') {
                 modelPath = `/static/model2/${modelType}`; // Path for model_curl.json
             } else {
-                modelPath = `/static/model/default_model.json`; // Default model path
+                modelPath = `/static/model/model_jab.json`; // Default model path
             }
             
             console.log('Loading model from:', modelPath);

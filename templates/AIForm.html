@@ -19,8 +19,16 @@
         document.addEventListener('DOMContentLoaded', async () => {
             const urlParams = new URLSearchParams(window.location.search);
             const modelType = urlParams.get('model') || 'model_jab.json';
+
+            let modelPath;
+            if (modelType === 'model_jab.json') {
+                modelPath = `/static/model/${modelType}`;  // Path for model_jab.json
+            } else if (modelType === 'model_curl.json') {
+                modelPath = `/static/model2/${modelType}`; // Path for model_curl.json
+            } else {
+                modelPath = `/static/model/default_model.json`; // Default model path
+            }
             
-            const modelPath = `/static/model/${modelType}`;
             console.log('Loading model from:', modelPath);
             
             // Show the loading message

@@ -14,41 +14,48 @@
     <div id="prediction"></div>
     
     <script>
+        async function loadModelAndMetadata(modelUrl, metadataUrl) {
+            const [model, metadataResponse] = await Promise.all([
+                tf.loadLayersModel(modelUrl),
+                fetch(metadataUrl)
+            ]);
+            const metadata = await metadataResponse.json();
+            return { model, metadata };
+        }
+
         document.addEventListener('DOMContentLoaded', async () => {
             const urlParams = new URLSearchParams(window.location.search);
             const modelType = urlParams.get('model') || 'model_jab.json';
+            let modelPath, metadataPath;
 
-            let modelPath;
             if (modelType === 'model_jab.json') {
-                modelPath = `/static/model/${modelType}`;  // Path for model_jab.json
+                modelPath = `/static/model/${modelType}`;
+                metadataPath = `/static/model/metadata.json`;  // Assuming metadata is in the same folder
             } else if (modelType === 'model_curl.json') {
-                modelPath = `/static/model2/${modelType}`; // Path for model_curl.json
+                modelPath = `/static/model2/${modelType}`;
+                metadataPath = `/static/model2/metadata.json`;
             } else {
-                modelPath = `/static/model/default_model.json`; // Default model path
+                modelPath = `/static/model/default_model.json`;
+                metadataPath = `/static/model/metadata.json`;
             }
-            
-            console.log('Loading model from:', modelPath);
-            
-            // Show the loading message
-            document.getElementById('loading').style.display = 'block';
 
-            // Attempt to load the model
-            const model = await tf.loadLayersModel(modelPath).catch(e => {
-                console.error('Error loading the model:', e);
+            // Load model and metadata
+            const { model, metadata } = await loadModelAndMetadata(modelPath, metadataPath).catch(e => {
+                console.error('Error loading the model or metadata:', e);
                 document.getElementById('loading').style.display = 'none';
                 document.getElementById('error').style.display = 'block';
                 return null;
             });
 
-            if (model) {
-                console.log('Model loaded');
+            if (model && metadata) {
+                console.log('Model and metadata loaded');
                 document.getElementById('loading').style.display = 'none'; // Hide loading message
                 await startWebcam();
-                await predictLoop(model);
+                await predictLoop(model, metadata);
             }
         });
 
-        async function startWebcam() {
+         async function startWebcam() {
             try {
                 const video = document.getElementById('webcam');
                 const stream = await navigator.mediaDevices.getUserMedia({ video: true });
@@ -60,32 +67,34 @@
             }
         }
 
-        async function predictLoop(model) {
+        async function predictLoop(model, metadata) {
             const video = document.getElementById('webcam');
             while (true) {
-                const prediction = await predict(video, model);
+                const prediction = await predict(video, model, metadata);
                 document.getElementById('prediction').innerText = `Prediction: ${prediction}`;
                 await tf.nextFrame(); // Wait for the next frame
             }
         }
 
-        async function predict(videoElement, model) {
-            try {
+
+        async function predict(videoElement, model, metadata) {
+            return tf.tidy(() => {
                 const tensor = tf.browser.fromPixels(videoElement)
-                                        .resizeNearestNeighbor([224, 224]) // Resize to match model input requirements
-                                        .toFloat()
-                                        .div(tf.scalar(127.5))
-                                        .sub(tf.scalar(1))
-                                        .expandDims();
-                const predictions = await model.predict(tensor).data();
-                // Convert predictions to human-readable form
-                // Example: Assuming a single output probability
-                return predictions[0].toFixed(3);  // Show prediction probability as a string to 3 decimal places
-            } catch (error) {
-                console.error("Prediction error:", error);
-                return 'Prediction error'; // Display a readable error
-            }
+                    .resizeNearestNeighbor([224, 224])
+                    .toFloat()
+                    .div(tf.scalar(127.5))
+                    .sub(tf.scalar(1))
+                    .expandDims();
+                const predictions = model.predict(tensor).dataSync();
+                // Handle output based on metadata
+                if (metadata && metadata.labels) {
+                    const predictedIndex = predictions.indexOf(Math.max(...predictions));
+                    return metadata.labels[predictedIndex];
+                }
+                return predictions.map(p => p.toFixed(3)).join(', ');  // Handle multiple outputs
+            });
         }
+
     </script>
 </body>
 </html>

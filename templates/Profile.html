@@ -51,9 +51,8 @@
     </style>
   </head>
   <body>
-    <h1>Welcome to My Awesome Page</h1>
-    <p>This is a simple HTML page with a touch of style.</p>
-
+    <h1>Your Form Matters Profile</h1>
+    <p>Find statistics over the work you've put into Form Matters!</p>
     <!-- Form to change body type and reason -->
     <form id="profileForm">
       <label for="bodyType">Choose your body type:</label>
@@ -90,9 +89,8 @@
         <option value="middle-aged">Middle-aged</option>
         <option value="senior">Senior</option></select
       ><br /><br />
-      <button type="submit">Save Changes</button>
     </form>
-
+    <a href="Home"><button>Save Changes</button></a>
     <!-- Add a section for displaying user stats -->
     <div>
       <h2>Your Sport and Fitness Stats</h2>
@@ -122,16 +120,16 @@
 
       // Example data for pie charts (replace with your actual data)
       const exerciseData = [
-        { label: "Running", value: 30 },
-        { label: "Cycling", value: 20 },
-        { label: "Yoga", value: 15 },
+        { label: "Boxing", value: 30 },
+        { label: "Weight Lifting", value: 20 },
+        { label: "Baseball", value: 15 },
         // Add more exercise categories
       ];
 
       const foodData = [
-        { label: "Vegetables", value: 40 },
-        { label: "Protein", value: 30 },
-        { label: "Carbs", value: 25 },
+        { label: "Fruits and Veggies", value: 30 },
+        { label: "Protein", value: 20 },
+        { label: "Carbs", value: 50 },
         // Add more food categories
       ];
 
@@ -142,11 +140,11 @@
       // Update user stats
       document.getElementById("totalDistance").textContent = getRandomNumber(
         1,
-        100
+        10
       );
       document.getElementById("totalCalories").textContent = getRandomNumber(
-        100,
-        1000
+        500,
+        2000
       );
 
       // Handle form submission

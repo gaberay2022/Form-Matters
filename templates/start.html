@@ -8,10 +8,10 @@
       body {
         font-family: Arial, sans-serif;
         background-image: url("https://raw.githubusercontent.com/Abraham-Mitchell/Abraham-Mitchell.github.io/main/formmatters.png");
-        background-size: 100% auto;
+        background-size: cover; /* Cover the entire viewport */
         background-repeat: no-repeat;
         background-position: center;
-        background-color: #1a1a1a;
+        background-color: #1a1a1a; /* Fallback background color */
         color: #ffffff;
         margin: 0;
         padding: 0;
@@ -21,24 +21,30 @@
         justify-content: center;
         height: 100vh;
       }
+
       h1 {
         color: #ff9900;
         text-align: center;
         padding: 20px;
+        margin: 0; /* Remove default margin */
       }
+
       p {
-        color: #ccc;
+        color: #ffffff;
         text-align: center;
-        font-size: 18px;
+        font-size: 24px;
+        margin: 20px;
       }
+
       a {
         display: block;
         text-align: center;
         margin: 20px auto;
         text-decoration: none;
       }
+
       button {
-        background-color: #ff9900; /* Sporty orange color */
+        background-color: #ff9900;
         color: #fff;
         border: none;
         padding: 10px 20px;
@@ -47,15 +53,15 @@
         border-radius: 5px;
         transition: background-color 0.3s ease;
       }
+
       button:hover {
-        background-color: #ff6600; /* Darker shade on hover */
+        background-color: #ff6600;
       }
     </style>
   </head>
   <body>
     <h1>Form Matters!</h1>
-    <p style="color: #fffffffa; font-size: 40px;">
-      
+    <p>
       If you believe, like us, that your form matters, then please log in or
       sign up to start improving your form today!
     </p>

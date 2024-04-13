@@ -14,15 +14,6 @@
     <div id="prediction"></div>
     
     <script>
-        async function loadModelAndMetadata(modelUrl, metadataUrl) {
-            const [model, metadataResponse] = await Promise.all([
-                tf.loadLayersModel(modelUrl),
-                fetch(metadataUrl)
-            ]);
-            const metadata = await metadataResponse.json();
-            return { model, metadata };
-        }
-
         document.addEventListener('DOMContentLoaded', async () => {
             const urlParams = new URLSearchParams(window.location.search);
             const modelType = urlParams.get('model') || 'model_jab.json';
@@ -35,27 +26,39 @@
                 modelPath = `/static/model2/${modelType}`;
                 metadataPath = `/static/model2/metadata.json`;
             } else {
-                modelPath = `/static/model/default_model.json`;
+                modelPath = `/static/model/model_jab.json`;
                 metadataPath = `/static/model/metadata.json`;
             }
+            
+            console.log('Loading model and metadata from:', modelPath, metadataPath);
+            
+            // Show the loading message
+            document.getElementById('loading').style.display = 'block';
 
             // Load model and metadata
-            const { model, metadata } = await loadModelAndMetadata(modelPath, metadataPath).catch(e => {
-                console.error('Error loading the model or metadata:', e);
-                document.getElementById('loading').style.display = 'none';
-                document.getElementById('error').style.display = 'block';
-                return null;
-            });
-
-            if (model && metadata) {
+            try {
+                const { model, metadata } = await loadModelAndMetadata(modelPath, metadataPath);
                 console.log('Model and metadata loaded');
                 document.getElementById('loading').style.display = 'none'; // Hide loading message
                 await startWebcam();
                 await predictLoop(model, metadata);
+            } catch (error) {
+                console.error('Error loading the model or metadata:', error);
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('error').style.display = 'block';
             }
         });
 
-         async function startWebcam() {
+        async function loadModelAndMetadata(modelUrl, metadataUrl) {
+            const [model, metadataResponse] = await Promise.all([
+                tf.loadLayersModel(modelUrl),
+                fetch(metadataUrl)
+            ]);
+            const metadata = await metadataResponse.json();
+            return { model, metadata };
+        }
+
+        async function startWebcam() {
             try {
                 const video = document.getElementById('webcam');
                 const stream = await navigator.mediaDevices.getUserMedia({ video: true });
@@ -76,7 +79,6 @@
             }
         }
 
-
         async function predict(videoElement, model, metadata) {
             return tf.tidy(() => {
                 const tensor = tf.browser.fromPixels(videoElement)
@@ -86,15 +88,13 @@
                     .sub(tf.scalar(1))
                     .expandDims();
                 const predictions = model.predict(tensor).dataSync();
-                // Handle output based on metadata
                 if (metadata && metadata.labels) {
                     const predictedIndex = predictions.indexOf(Math.max(...predictions));
                     return metadata.labels[predictedIndex];
                 }
-                return predictions.map(p => p.toFixed(3)).join(', ');  // Handle multiple outputs
+                return predictions.map(p => p.toFixed(3)).join(', ');  // If multiple outputs, format them
             });
         }
-
     </script>
 </body>
 </html>

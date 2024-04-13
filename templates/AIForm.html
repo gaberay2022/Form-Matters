@@ -86,17 +86,22 @@
         async function predict(videoElement, model, metadata) {
             return tf.tidy(() => {
                 let tensor = tf.browser.fromPixels(videoElement)
-                    .resizeNearestNeighbor([224, 224])  // Assuming the model was trained with this input size
+                    .resizeNearestNeighbor([224, 224]) // Adjust this size if necessary
                     .toFloat()
                     .div(tf.scalar(127.5))
                     .sub(tf.scalar(1))
                     .expandDims();
 
-                // Check if we need to flatten the tensor for the model
-                if (model.inputs[0].shape.length === 2) {
-                    // Flatten the tensor if the model expects a 2D input
-                    tensor = tensor.reshape([1, -1]);  // This reshapes it to [batch size, features]
+                // Reshape tensor to match the model's expected input shape, adjust as necessary
+                const totalElements = tensor.size;
+                if (totalElements !== 14739) {
+                    // Calculate the new dimensions
+                    const resizeFactor = Math.sqrt(14739 / totalElements);
+                    const newHeight = Math.round(tensor.shape[1] * resizeFactor);
+                    const newWidth = Math.round(tensor.shape[2] * resizeFactor);
+                    tensor = tensor.resizeNearestNeighbor([newHeight, newWidth]);
                 }
+                tensor = tensor.reshape([1, -1]); // Flatten the tensor
 
                 const predictions = model.predict(tensor).dataSync();
                 if (metadata && metadata.labels) {
@@ -106,6 +111,7 @@
                 return predictions.map(p => p.toFixed(3)).join(', ');
             });
         }
+
 
     </script>
 </body>

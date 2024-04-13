@@ -1,14 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Simple Page</title>
-</head>
-<body>
-    <h1>Welcome to My Page</h1>
-    <p>This is a simple HTML page.</p>
-    <a href="Baseball"><p2>Baseball</p2></a>
-    <a href="Boxing"><p3>Boxing</p3></a>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sports Overview</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #1a1a1a;
+        color: #ffffff;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+      }
+      h1 {
+        color: #ff9900;
+        text-align: center;
+        padding: 20px;
+      }
+      h3 {
+        color: #ccc;
+        text-align: center;
+        font-size: 18px;
+      }
+      a {
+        display: block;
+        text-align: center;
+        margin: 20px auto;
+        text-decoration: none;
+      }
+      p2,
+      p3,
+      p4 {
+        color: #ff9900;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Welcome, athlete, to the sports page!</h1>
+    <h3>Please choose a sport from the list below:</h3>
+    <h3>_________________________________________________</h3>
+    <a href="Soccer"><p2>Soccer</p2></a>
+    <a href="Baseball"><p3>Baseball</p3></a>
+    <a href="Boxing"><p4>Boxing</p4></a>
+  </body>
 </html>

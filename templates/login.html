@@ -3,11 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>My Simple Page</title>
+    <title>Sporty Form Improvement Hub</title>
     <style>
       body {
         font-family: Arial, sans-serif;
-        background-color: #f5f5f5;
+        background-color: #1a1a1a;
+        color: #ffffff;
         margin: 0;
         padding: 0;
         display: flex;
@@ -17,14 +18,25 @@
         height: 100vh;
       }
       h1 {
-        color: #333;
+        color: #ff9900;
         text-align: center;
         padding: 20px;
       }
       p {
-        color: #666;
+        color: #ccc;
         text-align: center;
         font-size: 18px;
+      }
+      input[type="text"],
+      input[type="password"],
+      input[type="email"] {
+        width: 80%;
+        padding: 10px;
+        margin: 10px;
+        border: none;
+        border-radius: 5px;
+        background-color: #333;
+        color: #fff;
       }
       a {
         display: block;
@@ -33,7 +45,7 @@
         text-decoration: none;
       }
       button {
-        background-color: #007bff;
+        background-color: #ff9900; /* Sporty orange color */
         color: #fff;
         border: none;
         padding: 10px 20px;
@@ -43,13 +55,15 @@
         transition: background-color 0.3s ease;
       }
       button:hover {
-        background-color: #0056b3;
+        background-color: #ff6600; /* Darker shade on hover */
       }
     </style>
   </head>
   <body>
-    <h1>Form Matters!</h1>
-    <p>To start improving your form, please login.</p>
-    <a href="Home"><button>Log In</button></a>
+    <h1>Sign Up for Form Matters!</h1>
+    <p>Please enter your email and password to continue:</p>
+    <input type="email" placeholder="Email" />
+    <input type="password" placeholder="Password" />
+    <a href="Home"><button>Login</button></a>
   </body>
 </html>

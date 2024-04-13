@@ -85,26 +85,28 @@
 
         async function predict(videoElement, model, metadata) {
             return tf.tidy(() => {
-                const tensor = tf.browser.fromPixels(videoElement)
-                    .resizeNearestNeighbor([224, 224])
+                let tensor = tf.browser.fromPixels(videoElement)
+                    .resizeNearestNeighbor([224, 224])  // Assuming the model was trained with this input size
                     .toFloat()
                     .div(tf.scalar(127.5))
                     .sub(tf.scalar(1))
                     .expandDims();
-                
-                const predictions = model.predict(tensor).dataSync();
-                const maxPredictionIndex = predictions.indexOf(Math.max(...predictions));
-                
-                // Debugging the raw predictions
-                console.log("Raw predictions:", predictions);
-                if (metadata && metadata.labels) {
-                    console.log("Predicted label:", metadata.labels[maxPredictionIndex], "with probability", predictions[maxPredictionIndex].toFixed(3));
-                    return metadata.labels[maxPredictionIndex]; // Returns the label with the highest probability
+
+                // Check if we need to flatten the tensor for the model
+                if (model.inputs[0].shape.length === 2) {
+                    // Flatten the tensor if the model expects a 2D input
+                    tensor = tensor.reshape([1, -1]);  // This reshapes it to [batch size, features]
                 }
-                
-                return `Prediction index: ${maxPredictionIndex} with probability ${predictions[maxPredictionIndex].toFixed(3)}`;
+
+                const predictions = model.predict(tensor).dataSync();
+                if (metadata && metadata.labels) {
+                    const predictedIndex = predictions.indexOf(Math.max(...predictions));
+                    return metadata.labels[predictedIndex];
+                }
+                return predictions.map(p => p.toFixed(3)).join(', ');
             });
         }
+
     </script>
 </body>
 </html>

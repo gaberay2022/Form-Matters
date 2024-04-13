@@ -4,7 +4,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def hello():
-    return "Hello, World!"
+    return render_template('start.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
@@ -60,3 +60,7 @@ def SwingBat():
 @app.route('/BasicJab')
 def BasicJab():
     return render_template('BasicJab.html')
+
+@app.route('/AIForm')
+def AIForm():
+    return render_template('AIForm.html')

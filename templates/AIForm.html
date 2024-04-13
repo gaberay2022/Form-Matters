@@ -11,7 +11,8 @@
     <div id="loading" style="display:none;">Loading model, please wait...</div>
     <div id="error" style="display:none; color: red;">Error loading the model. Please try again.</div>
     <video id="webcam" autoplay width="640" height="480"></video>
-    <div id="prediction"></div>
+    <div id="prediction" style="color: black; background-color: white; font-size: 20px;"></div>
+
     
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
@@ -74,10 +75,12 @@
             const video = document.getElementById('webcam');
             while (true) {
                 const prediction = await predict(video, model, metadata);
+                console.log("Current prediction:", prediction); // Log the prediction to see what's being output
                 document.getElementById('prediction').innerText = `Prediction: ${prediction}`;
                 await tf.nextFrame(); // Wait for the next frame
             }
         }
+
 
         async function predict(videoElement, model, metadata) {
             return tf.tidy(() => {

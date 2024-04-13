@@ -53,8 +53,10 @@
                 fetch(metadataUrl)
             ]);
             const metadata = await metadataResponse.json();
+            console.log("Loaded metadata:", metadata);  // Confirm metadata is loaded correctly
             return { model, metadata };
         }
+
 
         async function startWebcam() {
             try {
@@ -74,11 +76,12 @@
             const video = document.getElementById('webcam');
             while (true) {
                 const prediction = await predict(video, model, metadata);
-                console.log("Current prediction:", prediction);
+                console.log("Current prediction displayed:", prediction);  // Log the prediction being displayed
                 document.getElementById('prediction').innerText = `Prediction: ${prediction}`;
                 await tf.nextFrame();
             }
         }
+
 
         async function predict(videoElement, model, metadata) {
             return tf.tidy(() => {
@@ -88,12 +91,18 @@
                     .div(tf.scalar(127.5))
                     .sub(tf.scalar(1))
                     .expandDims();
+                
                 const predictions = model.predict(tensor).dataSync();
+                const maxPredictionIndex = predictions.indexOf(Math.max(...predictions));
+                
+                // Debugging the raw predictions
+                console.log("Raw predictions:", predictions);
                 if (metadata && metadata.labels) {
-                    const predictedIndex = predictions.indexOf(Math.max(...predictions));
-                    return metadata.labels[predictedIndex];
+                    console.log("Predicted label:", metadata.labels[maxPredictionIndex], "with probability", predictions[maxPredictionIndex].toFixed(3));
+                    return metadata.labels[maxPredictionIndex]; // Returns the label with the highest probability
                 }
-                return predictions.map(p => p.toFixed(3)).join(', ');  // If multiple outputs, format them
+                
+                return `Prediction index: ${maxPredictionIndex} with probability ${predictions[maxPredictionIndex].toFixed(3)}`;
             });
         }
     </script>

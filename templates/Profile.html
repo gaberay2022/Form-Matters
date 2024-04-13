@@ -112,7 +112,7 @@
                 if (data.error) {
                     console.error('Error:', data.error);
                 } else {
-                  const name = data.file_contents;
+                  namee = data.file_contents;
                 }
             })
             .catch(error => console.error('Error:', error));
@@ -166,7 +166,7 @@
           console.log("Weight:", weight);
           console.log("Age:", age);
 
-          senddata(name, bodyType, reason, height, weight)
+          senddata(namee, bodyType, reason, height, weight)
           
           // Optionally, update UI to reflect changes (e.g., show a success message)
         });

@@ -11,12 +11,9 @@
     <div id="loading" style="display:none;">Loading model, please wait...</div>
     <div id="error" style="display:none; color: red;"></div>
     <video id="webcam" autoplay width="640" height="480"></video>
-    <div id="prediction" style="color: black; background-color: white; font-size: 50px;"></div>
+    <div id="prediction" style="color: black; background-color: white; font-size: 60px;"></div>
 
     <script>
-        const predictionsBuffer = [];
-        const bufferSize = 5;  // Size of the buffer for smoothing predictions
-
         document.addEventListener('DOMContentLoaded', async () => {
             const urlParams = new URLSearchParams(window.location.search);
             const modelType = urlParams.get('model') || 'model_jab.json';
@@ -50,55 +47,16 @@
             }
         });
 
-        async function predictLoop(model, metadata) {
-            const video = document.getElementById('webcam');
-            while (true) {
-                const prediction = await predict(video, model, metadata);
-                predictionsBuffer.push(prediction);
-                if (predictionsBuffer.length > bufferSize) {
-                    predictionsBuffer.shift();  // Remove the oldest prediction
-                }
-                const averagedPrediction = getMostCommonPrediction(predictionsBuffer);
-                document.getElementById('prediction').innerText = `Prediction: ${averagedPrediction}`;
-                await tf.nextFrame();
-            }
-        }
-
-        function getMostCommonPrediction(predictions) {
-            const counts = predictions.reduce((acc, pred) => {
-                acc[pred] = (acc[pred] || 0) + 1;
-                return acc;
-            }, {});
-            return Object.keys(counts).reduce((a, b) => counts[a] > counts[b] ? a : b);
-        }
-
-        async function predict(videoElement, model, metadata) {
-            return tf.tidy(() => {
-                const tensor = tf.browser.fromPixels(videoElement)
-                    .resizeNearestNeighbor([224, 224])
-                    .toFloat()
-                    .div(tf.scalar(255))
-                    .sub(tf.scalar(0.5))
-                    .mul(tf.scalar(2))
-                    .expandDims();
-
-                const predictions = model.predict(tensor).dataSync();
-                if (metadata && metadata.labels) {
-                    const predictedIndex = predictions.indexOf(Math.max(...predictions));
-                    return metadata.labels[predictedIndex];
-                }
-                return predictions.map(p => p.toFixed(3)).join(', ');
-            });
-        }
-
         async function loadModelAndMetadata(modelUrl, metadataUrl) {
             const [model, metadataResponse] = await Promise.all([
                 tf.loadLayersModel(modelUrl),
                 fetch(metadataUrl)
             ]);
             const metadata = await metadataResponse.json();
+            console.log("Loaded metadata:", metadata);  // Confirm metadata is loaded correctly
             return { model, metadata };
         }
+
 
         async function startWebcam() {
             try {
@@ -113,6 +71,54 @@
                 document.getElementById('error').style.display = 'block';
             }
         }
+
+        async function predictLoop(model, metadata) {
+            const video = document.getElementById('webcam');
+            while (true) {
+                const prediction = await predict(video, model, metadata);
+                console.log("Current prediction displayed:", prediction);  // Log the prediction being displayed
+                document.getElementById('prediction').innerText = `Prediction: ${prediction}`;
+                await tf.nextFrame();
+            }
+        }
+
+
+        async function predict(videoElement, model, metadata) {
+            return tf.tidy(() => {
+                const tensor = tf.browser.fromPixels(videoElement)
+                    .resizeNearestNeighbor([224, 224])  // Ensure this matches the training input size
+                    .toFloat()
+                    .div(tf.scalar(255))  // Adjust this to match training preprocessing
+                    .sub(tf.scalar(0.5))  // If needed, adjust mean subtraction
+                    .mul(tf.scalar(2));   // If needed, adjust scaling
+
+
+                // Reshape or pad the tensor to fit the expected input shape of the model
+                let flattenedTensor = tensor.reshape([-1]); // Flatten the tensor
+                if (flattenedTensor.shape[0] > 14739) {
+                    // Slice the tensor to match the required input size
+                    flattenedTensor = flattenedTensor.slice([0], [14739]);
+                } else if (flattenedTensor.shape[0] < 14739) {
+                    // Pad the tensor if it's smaller than required
+                    const padding = 14739 - flattenedTensor.shape[0];
+                    const paddings = [[0, padding]]; // pad end of the tensor
+                    flattenedTensor = flattenedTensor.pad(paddings);
+                }
+
+                // Reshape to match the input shape of the model
+                flattenedTensor = flattenedTensor.reshape([1, 14739]);
+
+                const predictions = model.predict(flattenedTensor).dataSync();
+                if (metadata && metadata.labels) {
+                    const predictedIndex = predictions.indexOf(Math.max(...predictions));
+                    return metadata.labels[predictedIndex];
+                }
+                return predictions.map(p => p.toFixed(3)).join(', ');
+            });
+        }
+
+
+
     </script>
 </body>
 </html>

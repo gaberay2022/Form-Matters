@@ -106,6 +106,18 @@
 
     <!-- JavaScript to update stats and create pie charts -->
     <script>
+
+        fetch('/get_file_contents')
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    console.error('Error:', data.error);
+                } else {
+                    const name = data.file_contents;
+                }
+            })
+            .catch(error => console.error('Error:', error));
+
       // Example data for pie charts (replace with your actual data)
       const exerciseData = [
         { label: "Boxing", value: 30 },
@@ -155,6 +167,8 @@
           console.log("Weight:", weight);
           console.log("Age:", age);
 
+          senddata(name, bodyType, reason, height, weight)
+          
           // Optionally, update UI to reflect changes (e.g., show a success message)
         });
 
@@ -183,6 +197,32 @@
       function getRandomNumber(min, max) {
         return Math.floor(Math.random() * (max - min + 1)) + min;
       }
+
+
+function writedata(n,bt,r,h,w,a){
+    data = n+","+bt+","+r+","+h+","+w+","+a
+}
+
+function senddata(n,bt,r,h,w,a){
+    writedata(n,bt,r,h,w,a)
+    var dataToSend = {content: data}
+    fetch('/ModifySignUpfile', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(dataToSend)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            console.error('Error:', data.error)
+        } else {
+            console.log('File modified successfully')
+        }
+    })
+    .catch(error => console.error('Error:', error))
+}
     </script>
   </body>
 </html>

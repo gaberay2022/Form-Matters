@@ -65,14 +65,15 @@ let password = ""
 let data = []
 
 function SubmitComplete() {
-    Name = document.getElementById("name")
-    email = document.getElementById("email")
-    password = document.getElementById("password")
+    Name = document.getElementById("name").value
+    email = document.getElementById("email").value
+    password = document.getElementById("password").value
     writedata(Name,email,password)
 }
 
 function writedata(n,e,p){
     data = n+","+e+","+p
+    namee = {content: n}
 }
 
 function senddata(){
@@ -94,7 +95,24 @@ function senddata(){
         }
     })
     .catch(error => console.error('Error:', error))
-    window.location.href = "Profile.html";
+    fetch('/savename', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(name)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            console.error('Error:', data.error)
+        } else {
+            console.log('File modified successfully')
+        }
+    })
+    .catch(error => console.error('Error:', error))
+
+    window.location.href = "Profile";
 }
     </script>
 <body>

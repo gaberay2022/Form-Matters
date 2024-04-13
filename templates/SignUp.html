@@ -58,13 +58,62 @@
         background-color: #ff6600; /* Darker shade on hover */
       }
     </style>
-  </head>
-  <body>
-    <h1>Sign Up for Form Matters!</h1>
-    <p>Please enter your name, email, and create a password to continue:</p>
-    <input type="text" placeholder="Name" />
-    <input type="email" placeholder="Email" />
-    <input type="password" placeholder="Password" />
-    <a href="Profile"><button>Sign Up</button></a>
-  </body>
+    <script>
+let Name = ""
+let email = ""
+let password = ""
+let data = []
+
+function SubmitComplete() {
+    Name = document.getElementById("name")
+    email = document.getElementById("email")
+    password = document.getElementById("password")
+    writedata(Name,email,password)
+}
+
+function writedata(n,e,p){
+    data = n+","+e+","+p
+}
+
+function senddata(){
+    SubmitComplete()
+    var dataToSend = {content: data}
+    fetch('/ModifySignUpfile', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(dataToSend)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            console.error('Error:', data.error)
+        } else {
+            console.log('File modified successfully')
+        }
+    })
+    .catch(error => console.error('Error:', error))
+    window.location.href = "Profile.html";
+}
+    </script>
+<body>
+    <h1>Welcome to Form Matters Sign Up!</h1>
+    <p>Please enter your name, email, and a password</p>
+    <form id="registrationForm">
+        <div>
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+        </div>
+        <div>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+        </div>
+        <div>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+    </form>
+    <button onclick="senddata()">Sign Up</button>
+</body>
 </html>

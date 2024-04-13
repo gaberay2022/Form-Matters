@@ -75,5 +75,19 @@ def Recievedata():
     else:
         return jsonify({'error': 'No data received'})
     
+@app.route('/savename', methods=["POST"])
+def setname():
+    data = request.json
+    if data:
+        file_path = "currentuser.csv"
+        with open(file_path,'w') as file:
+            pass
+        with open(file_path, 'a') as f:
+            f.write(data['content'])
+        return jsonify({'success': True})
+    else:
+        return jsonify({'error': 'No data received'})
+    
+    
 if __name__ == '__main__':
     app.run(debug=True)

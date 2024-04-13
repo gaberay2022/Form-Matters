@@ -73,6 +73,7 @@ function SubmitComplete() {
 
 function writedata(n,e,p){
     data = n+","+e+","+p
+    namee = {content: n}
 }
 
 function senddata(){
@@ -94,6 +95,23 @@ function senddata(){
         }
     })
     .catch(error => console.error('Error:', error))
+    fetch('/savename', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(name)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            console.error('Error:', data.error)
+        } else {
+            console.log('File modified successfully')
+        }
+    })
+    .catch(error => console.error('Error:', error))
+
     window.location.href = "Profile";
 }
     </script>

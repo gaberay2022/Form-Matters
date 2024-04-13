@@ -9,10 +9,10 @@
 <body>
     <h1>Dynamic TensorFlow.js Prediction</h1>
     <div id="loading" style="display:none;">Loading model, please wait...</div>
-    <div id="error" style="display:none; color: red;">Error loading the model. Please try again.</div>
+    <div id="error" style="display:none; color: red;"></div>
     <video id="webcam" autoplay width="640" height="480"></video>
-    <div id="prediction"></div>
-    
+    <div id="prediction" style="color: black; background-color: white; font-size: 20px;"></div>
+
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
             const urlParams = new URLSearchParams(window.location.search);
@@ -31,20 +31,18 @@
             }
             
             console.log('Loading model and metadata from:', modelPath, metadataPath);
-            
-            // Show the loading message
             document.getElementById('loading').style.display = 'block';
 
-            // Load model and metadata
             try {
                 const { model, metadata } = await loadModelAndMetadata(modelPath, metadataPath);
                 console.log('Model and metadata loaded');
-                document.getElementById('loading').style.display = 'none'; // Hide loading message
+                document.getElementById('loading').style.display = 'none';
                 await startWebcam();
                 await predictLoop(model, metadata);
             } catch (error) {
                 console.error('Error loading the model or metadata:', error);
                 document.getElementById('loading').style.display = 'none';
+                document.getElementById('error').textContent = `Error loading model: ${error.message}`;
                 document.getElementById('error').style.display = 'block';
             }
         });
@@ -63,10 +61,12 @@
                 const video = document.getElementById('webcam');
                 const stream = await navigator.mediaDevices.getUserMedia({ video: true });
                 video.srcObject = stream;
-                await new Promise(resolve => video.onloadedmetadata = resolve); // Wait until the video stream is ready
+                await new Promise(resolve => video.onloadedmetadata = resolve);
                 console.log("Webcam successfully started");
             } catch (error) {
-                console.error('Error accessing the webcam: ', error);
+                console.error('Error accessing the webcam:', error);
+                document.getElementById('error').textContent = `Webcam Error: ${error.message}`;
+                document.getElementById('error').style.display = 'block';
             }
         }
 
@@ -74,8 +74,9 @@
             const video = document.getElementById('webcam');
             while (true) {
                 const prediction = await predict(video, model, metadata);
+                console.log("Current prediction:", prediction);
                 document.getElementById('prediction').innerText = `Prediction: ${prediction}`;
-                await tf.nextFrame(); // Wait for the next frame
+                await tf.nextFrame();
             }
         }
 

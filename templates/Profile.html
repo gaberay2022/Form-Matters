@@ -106,13 +106,13 @@
 
     <!-- JavaScript to update stats and create pie charts -->
     <script>
-      fetch('/readname')
+    fetch('/readname')
             .then(response => response.json())
             .then(data => {
                 if (data.error) {
                     console.error('Error:', data.error);
                 } else {
-                  const name = data.file_contents;
+                  name = data.file_contents;
                 }
             })
             .catch(error => console.error('Error:', error));

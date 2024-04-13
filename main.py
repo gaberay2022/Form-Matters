@@ -60,6 +60,7 @@ def BasicJab():
 
 @app.route('/AIForm')
 def AIForm():
+    model_type = request.args.get('model', 'model_jab.json')
     return render_template('AIForm.html')
 
 @app.route('/ModifySignUpfile', methods=["POST"])

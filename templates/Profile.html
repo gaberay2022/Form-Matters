@@ -1,13 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Simple Page</title>
-</head>
-<body>
-    <h1>Welcome to My Page</h1>
-    <p>This is a simple HTML page.</p>
+  <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Awesome Page</title>
+    <style>
+      /* Add some styling to make it beautiful and sporty */
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #1a1a1a;
+        color: #ffffff;
+        text-align: center;
+      }
+
+      h1 {
+        color: #ff9900;
+        text-align: center;
+        padding: 20px;
+      }
+
+      button {
+        background-color: #28a745;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        cursor: pointer;
+        font-size: 16px;
+      }
+
+      button:hover {
+        background-color: #218838;
+      }
+
+      .chart-container {
+        display: flex;
+        justify-content: space-around;
+        margin-top: 20px;
+      }
+
+      .chart {
+        width: 45%;
+        min-width: 300px;
+        height: 300px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 10px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Welcome to My Awesome Page</h1>
+    <p>This is a simple HTML page with a touch of style.</p>
     <a href="Home"><button>Save Profile</button></a>
-</body>
+
+    <!-- Add a section for displaying user stats -->
+    <div>
+      <h2>Your Stats</h2>
+      <p>Total visits: <span id="visitCount">0</span></p>
+      <!-- You can add more stats here as needed -->
+    </div>
+
+    <!-- Interactive pie charts -->
+    <div class="chart-container">
+      <canvas id="exerciseChart" class="chart"></canvas>
+      <canvas id="foodChart" class="chart"></canvas>
+    </div>
+
+    <!-- JavaScript to update stats and create pie charts -->
+    <script>
+      // Example data for pie charts (replace with your actual data)
+      const exerciseData = [
+        { label: "Running", value: 30 },
+        { label: "Cycling", value: 20 },
+        { label: "Yoga", value: 15 },
+        // Add more exercise categories
+      ];
+
+      const foodData = [
+        { label: "Vegetables", value: 40 },
+        { label: "Protein", value: 30 },
+        { label: "Carbs", value: 25 },
+        // Add more food categories
+      ];
+
+      // Create pie charts (you can use a library like Chart.js)
+      // For simplicity, I'm leaving this part as a placeholder
+      // Feel free to customize and enhance!
+      createPieChart("exerciseChart", exerciseData, "Exercise");
+      createPieChart("foodChart", foodData, "Food");
+
+      function createPieChart(containerId, data, title) {
+        const ctx = document.getElementById(containerId).getContext("2d");
+        new Chart(ctx, {
+          type: "pie",
+          data: {
+            labels: data.map((item) => item.label),
+            datasets: [
+              {
+                data: data.map((item) => item.value),
+                backgroundColor: ["red", "green", "blue"], // Customize colors as needed
+              },
+            ],
+          },
+          options: {
+            title: {
+              display: true,
+              text: title,
+            },
+          },
+        });
+      }
+    </script>
+  </body>
 </html>

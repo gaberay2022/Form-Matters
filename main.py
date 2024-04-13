@@ -101,7 +101,7 @@ def setname():
     else:
         return jsonify({'error': 'No data received'})
     
-@app.route('/readname', methods=["GET"])
+@app.route('/readname', methods=["GET","POST"])
 def ReadData():
     data = request.json
     if data:

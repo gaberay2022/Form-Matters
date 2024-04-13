@@ -1,13 +1,101 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Simple Page</title>
-</head>
-<body>
-    <h1>Welcome to My Page</h1>
-    <p>This is a simple HTML page.</p>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Awesome Page</title>
+    <style>
+      /* Add some styling to make it beautiful and sporty */
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f9f9f9;
+        text-align: center;
+      }
+      h1 {
+        color: #007bff;
+      }
+      button {
+        background-color: #28a745;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        cursor: pointer;
+        font-size: 16px;
+      }
+      button:hover {
+        background-color: #218838;
+      }
+      .chart-container {
+        display: flex;
+        justify-content: space-around;
+        margin-top: 20px;
+      }
+      .chart {
+        width: 45%;
+        min-width: 300px;
+        height: 300px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 10px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Welcome to My Awesome Page</h1>
+    <p>This is a simple HTML page with a touch of style.</p>
     <a href="Home"><button>Save Profile</button></a>
-</body>
+
+    <!-- Add a section for displaying user stats -->
+    <div>
+      <h2>Your Stats</h2>
+      <p>Total visits: <span id="visitCount">0</span></p>
+      <!-- You can add more stats here as needed -->
+    </div>
+
+    <!-- Interactive pie charts -->
+    <div class="chart-container">
+      <div class="chart" id="exerciseChart"></div>
+      <div class="chart" id="foodChart"></div>
+    </div>
+
+    <!-- JavaScript to update stats and create pie charts -->
+    <script>
+      // Simulate fetching stats from your website backend
+      const stats = {
+        visits: 42, // Replace with actual data
+        // Add more stats properties here
+      };
+
+      // Update the visit count
+      document.getElementById("visitCount").textContent = stats.visits;
+
+      // Create exercise and food pie charts (you can customize further)
+      // Example data (replace with actual data):
+      const exerciseData = [
+        { label: "Running", value: 30 },
+        { label: "Cycling", value: 20 },
+        { label: "Yoga", value: 15 },
+        // Add more exercise categories
+      ];
+
+      const foodData = [
+        { label: "Vegetables", value: 40 },
+        { label: "Protein", value: 30 },
+        { label: "Carbs", value: 25 },
+        // Add more food categories
+      ];
+
+      // Create pie charts
+      createPieChart("exerciseChart", exerciseData, "Exercise");
+      createPieChart("foodChart", foodData, "Food");
+
+      function createPieChart(containerId, data, title) {
+        // Implement your pie chart creation logic here
+        // You can use libraries like Chart.js or D3.js
+        // For simplicity, I'm leaving this part as a placeholder
+        // Feel free to customize and enhance!
+      }
+    </script>
+  </body>
 </html>

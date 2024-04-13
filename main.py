@@ -1,4 +1,5 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
+
 
 app = Flask(__name__)
 
@@ -60,7 +61,8 @@ def BasicJab():
 
 @app.route('/AIForm')
 def AIForm():
-    return render_template('AIForm.html')
+    model_type = request.args.get('model', 'model_jab.json')
+    return render_template('AIForm.html', model_type=model_type)
 
 if __name__ == '__main__':
     app.run(debug=True)

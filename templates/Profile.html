@@ -106,13 +106,13 @@
 
     <!-- JavaScript to update stats and create pie charts -->
     <script>
-      fetch('/readname')
+    fetch('/readname')
             .then(response => response.json())
             .then(data => {
                 if (data.error) {
                     console.error('Error:', data.error);
                 } else {
-                  namee = data.file_contents;
+                  name = data.file_contents;
                 }
             })
             .catch(error => console.error('Error:', error));
@@ -166,7 +166,7 @@
           console.log("Weight:", weight);
           console.log("Age:", age);
 
-          senddata(namee, bodyType, reason, height, weight)
+          senddata(name, bodyType, reason, height, weight)
           
           // Optionally, update UI to reflect changes (e.g., show a success message)
         });

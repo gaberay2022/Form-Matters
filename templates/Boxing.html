@@ -50,8 +50,38 @@
         margin-top: 10px;
       }
 
+      button {
+        background-color: #28a745;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        cursor: pointer;
+        font-size: 16px;
+        margin-top: 20px;
+      }
+
+      button:hover {
+        background-color: #218838;
+      }
+
       li {
         margin-bottom: 8px;
+      }
+
+      /* Style the video container */
+      .video-container {
+        position: relative;
+        width: 100%;
+        padding-bottom: 56.25%; /* 16:9 aspect ratio */
+        margin-bottom: 20px; /* Add some spacing below the video */
+      }
+
+      .video-container iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
       }
     </style>
   </head>
@@ -95,10 +125,26 @@
       </ul>
     </section>
 
+    <!-- Embedded video -->
+    <div class="video-container">
+      <iframe
+        width="560"
+        height="315"
+        src="https://www.youtube.com/embed/YFuPm24Bok0"
+        frameborder="0"
+        allowfullscreen
+      ></iframe>
+    </div>
+
     <!-- Link to learn how to improve boxing form -->
     <p>
       Want to improve your boxing form? Check out our guide on
       <a href="BasicJab">How to Improve Your Jab Form</a>.
+    </p>
+
+    <!-- Add the Home Page button -->
+    <p>
+      <a href="Home"><button>Home Page</button></a>
     </p>
   </body>
 </html>

@@ -90,7 +90,7 @@
         <option value="senior">Senior</option></select
       ><br /><br />
     </form>
-    <a href="Home"><button>Save Changes</button></a>
+    <a href="Home"><button onclick="dostuff()"">Save Changes</button></a>
     <!-- Add a section for displaying user stats -->
     <div>
       <h2>Your Sport and Fitness Stats</h2>
@@ -146,6 +146,19 @@
         2000
       );
 
+
+      function dostuff(){
+          var bodyt = document.getElementById("bodyType").value;
+          var re = document.getElementById("reason").value;
+          var he = document.getElementById("height").value;
+          var we = document.getElementById("weight").value;
+          var ag = document.getElementById("age").value;
+
+          senddata(name, bodyt, re, he, we,ag)
+      }
+
+
+
       // Handle form submission
       document
         .getElementById("profileForm")
@@ -164,10 +177,7 @@
           console.log("Reason:", reason);
           console.log("Height:", height);
           console.log("Weight:", weight);
-          console.log("Age:", age);
-
-          senddata(name, bodyType, reason, height, weight)
-          
+          console.log("Age:", age);          
           // Optionally, update UI to reflect changes (e.g., show a success message)
         });
 

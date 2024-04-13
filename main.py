@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, jsonify
 
 app = Flask(__name__)
 
@@ -62,6 +62,17 @@ def BasicJab():
 def AIForm():
     return render_template('AIForm.html')
 
+@app.route('/ModifySignUpfile', methods=["POST"])
+def Recievedata():
+    data = request.json
+    if data:
+        file_path = "userlogin.csv"
+        with open(file_path, 'a') as f:
+            f.write('\n')
+            f.write(data['content'])
+        return jsonify({'success': True})
+    else:
+        return jsonify({'error': 'No data received'})
+    
 if __name__ == '__main__':
     app.run(debug=True)
-

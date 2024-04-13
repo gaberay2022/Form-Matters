@@ -67,6 +67,22 @@
         background-color: #ff9900;
       }
 
+      .food-entries {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+      }
+
+      .food-entry {
+        background-color: #f9f9f9;
+        padding: 10px;
+        border-radius: 5px;
+      }
+
+      .food-entry h3 {
+        margin-top: 0;
+      }
+
       .nutrients {
         display: flex;
         justify-content: space-between;
@@ -88,34 +104,33 @@
     </style>
   </head>
   <body>
-    <center>
-      <header>
-        <h1>FormMatters Food Log</h1>
-        <nav>
-          <ul>
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Log Food</a></li>
-            <li><a href="#">Profile</a></li>
-            <li><a href="#">Nutrition</a></li>
-          </ul>
-        </nav>
-      </header>
-    </center>
+    <header>
+        <center>
+      <h1>FormMatters Food Log</h1>
+      <nav>
+        <ul>
+          <li><a href="Home">Home</a></li>
+          <li><a href="Profile">Profile</a></li>
+        </ul>
+      </nav>
+    </header>
 
     <main>
       <section id="log-food">
         <center>
-          <h2>Log Food</h2>
+        <h2>Log Food</h2>
         </center>
         <div class="food-log-methods">
           <button id="take-photo-btn">Take Photo</button>
           <button id="manual-input-btn">Manual Input</button>
         </div>
+        <div class="food-entries" id="fake-data-container"></div>
+        <!-- Container for fake data -->
       </section>
 
       <section id="nutrition">
         <center>
-          <h2>Nutrition</h2>
+        <h2>Nutrition</h2>
         </center>
         <div class="nutrients">
           <div class="nutrient">
@@ -136,10 +151,48 @@
     </main>
 
     <footer>
-      <p>&copy; 2024 MyFitnessPal Clone. All rights reserved.</p>
+      <p>
+        &copy; 2024 Heroes Operating Electronic Solution. All rights reserved.
+      </p>
     </footer>
 
     <!-- JavaScript for functionality -->
-    <script src="app.js"></script>
+    <script>
+      // Function to generate and append fake data to the food log section
+      function generateFakeData() {
+        // Example fake data (you can replace it with your own data)
+        const fakeData = [
+          { food: "Chicken Breast", servingSize: "100g", calories: 165 },
+          { food: "Brown Rice", servingSize: "50g", calories: 180 },
+          { food: "Broccoli", servingSize: "1 cup", calories: 55 },
+        ];
+
+        const container = document.getElementById("fake-data-container");
+
+        // Loop through the fake data and create HTML elements for each entry
+        fakeData.forEach((item) => {
+          const entry = document.createElement("div");
+          entry.classList.add("food-entry");
+
+          const foodName = document.createElement("h3");
+          foodName.textContent = item.food;
+
+          const servingSize = document.createElement("p");
+          servingSize.textContent = "Serving Size: " + item.servingSize;
+
+          const calories = document.createElement("p");
+          calories.textContent = "Calories: " + item.calories;
+
+          entry.appendChild(foodName);
+          entry.appendChild(servingSize);
+          entry.appendChild(calories);
+
+          container.appendChild(entry);
+        });
+      }
+
+      // Call the function to generate fake data when the page loads
+      window.addEventListener("load", generateFakeData);
+    </script>
   </body>
 </html>

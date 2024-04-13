@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Fitness Community</title>
+    <style>
+      /* Add athletic styling */
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #1a1a1a;
+        color: #ffffff;
+        text-align: center;
+        margin: 0;
+        padding: 0;
+      }
+
+      h1 {
+        color: #ff9900;
+        text-align: center;
+        padding: 20px;
+      }
+
+      p {
+        font-size: 16px;
+        line-height: 1.5;
+      }
+
+      a {
+        color: #ff9900;
+        text-decoration: none;
+      }
+
+      a:hover {
+        text-decoration: underline;
+      }
+
+      /* Add custom styles for community sections */
+      .community-section {
+        background-color: #333;
+        padding: 20px;
+        margin: 20px;
+        border-radius: 10px;
+      }
+
+      .forum {
+        background-color: #444;
+        padding: 20px;
+        margin: 20px;
+        border-radius: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Welcome to Our Fitness Community</h1>
+    <p>Connect with other members, set goals, and track your progress!</p>
+
+    <!-- User goals and progress section -->
+    <div class="community-section" id="user-goals-progress">
+      <h2>User Goals and Progress</h2>
+      <!-- Display user goals and progress here -->
+      <!-- You can use dynamic content from a database or API -->
+    </div>
+
+    <!-- Forum section -->
+    <div class="forum">
+      <h2>Community Forum</h2>
+      <p>
+        Join the conversation! Share tips, ask questions, and motivate each
+        other.
+      </p>
+      <!-- Add a forum interface here (e.g., a chatbox, discussion threads, etc.) -->
+    </div>
+
+    <!-- Go back home button -->
+    <a href="Home"><button>Go Back Home</button></a>
+
+    <script>
+      // Function to generate and append user goals and progress data
+      function generateUserGoalsProgress() {
+        // Example data (you can replace it with your own data or fetch it from a database/API)
+        const userGoalsProgress = [
+          {
+            username: "John",
+            goal: "Lose 10 pounds",
+            progress: "5 pounds lost",
+          },
+          {
+            username: "Emily",
+            goal: "Run a marathon",
+            progress: "Training in progress",
+          },
+          {
+            username: "Michael",
+            goal: "Gain muscle mass",
+            progress: "Working on strength training",
+          },
+        ];
+
+        const userGoalsProgressContainer = document.getElementById(
+          "user-goals-progress"
+        );
+
+        // Loop through the data and create HTML elements for each entry
+        userGoalsProgress.forEach((item) => {
+          const entry = document.createElement("div");
+          entry.classList.add("user-goal-progress");
+
+          const username = document.createElement("h3");
+          username.textContent = `Username: ${item.username}`;
+
+          const goal = document.createElement("p");
+          goal.textContent = `Goal: ${item.goal}`;
+
+          const progress = document.createElement("p");
+          progress.textContent = `Progress: ${item.progress}`;
+
+          entry.appendChild(username);
+          entry.appendChild(goal);
+          entry.appendChild(progress);
+
+          userGoalsProgressContainer.appendChild(entry);
+        });
+      }
+
+      // Call the function to generate user goals and progress data when the page loads
+      window.addEventListener("load", generateUserGoalsProgress);
+    </script>
+  </body>
+</html>

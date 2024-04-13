@@ -58,6 +58,10 @@ def SwingBat():
 def Nutrition():
     return render_template('Nutrition.html')
 
+@app.route('/Community')
+def Community():
+    return render_template('Community.html')
+
 @app.route('/BasicJab')
 def BasicJab():
     return render_template('BasicJab.html')

@@ -5,6 +5,8 @@ import * as tf from '@tensorflow/tfjs';
 import * as ImagePicker from 'expo-image-picker';
 import axios from 'axios';
 import '@tensorflow/tfjs-react-native';
+import * as Permissions from 'expo-permissions'
+import { Asset } from 'expo-asset';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StyleSheet, Text, View, Button, TouchableOpacity } from 'react-native';
@@ -12,7 +14,18 @@ import { StyleSheet, Text, View, Button, TouchableOpacity } from 'react-native';
 //ai modle
 const initTensorFlow = async () => {
   await tf.ready();
-}
+  console.log('TensorFlow.js is ready');
+};
+
+
+const getPermissions = async () => {
+  const { status } = await Permissions.askAsync(Permissions.MEDIA_LIBRARY);
+  if (status !== 'granted'){
+    alert('Needed Media Permissions');
+  }
+};
+
+
 // Create a stack navigator
 const Stack = createNativeStackNavigator();
 
@@ -254,6 +267,8 @@ function AICurlScreen(){
 
 //AI Jab Screen
 function AIJabScreen({ navigation }) {
+  initTensorFlow();
+
   const [model, setModel] = useState(null);
   const [video, setVideo] = useState(null);
   const [results, setResults] = useState(null);
@@ -264,15 +279,27 @@ function AIJabScreen({ navigation }) {
     });
   }, []);
 
-  const loadModel = async () => {
+  async function loadModel() {
     try {
-      const model = await tf.loadLayersModel('FormMatters/AI Models/model.json');
-      setModel(model);
-      console.log('Model loaded successfully');
+        await tf.ready(); // Ensure TensorFlow.js is ready to be used.
+
+        // Load and convert the model and weights to bundle resource URI
+        const modelJson = require('C:/Users/yetti/Desktop/Hackathon 2024/Form-Matters/FormMatters/AI Models/model.json'); // Adjust the path
+        const modelWeights = require('C:/Users/yetti/DesktopHackathon 2024/Form-Matters/FormMatters/AI Models/weights.bin'); // Adjust the path
+
+        const modelJsonAsset = Asset.fromModule(modelJson);
+        await modelJsonAsset.downloadAsync();
+
+        const weightsAsset = Asset.fromModule(modelWeights);
+        await weightsAsset.downloadAsync();
+
+        const model = await tf.loadLayersModel(tf.io.browserFiles([modelJsonAsset, weightsAsset]));
+        setModel(model);
+        console.log('Model loaded successfully');
     } catch (error) {
-      console.error('Error loading model: ', error);
+        console.error('Error loading model:', error);
     }
-  };
+}
 
   const pickVideo = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({

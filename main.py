@@ -6,9 +6,6 @@ app = Flask(__name__)
 def hello():
     return render_template('start.html')
 
-if __name__ == '__main__':
-    app.run(debug=True)
-
 @app.route('/SignUp')
 def SignUp():
     return render_template('SignUp.html')
@@ -64,3 +61,7 @@ def BasicJab():
 @app.route('/AIForm')
 def AIForm():
     return render_template('AIForm.html')
+
+if __name__ == '__main__':
+    app.run(debug=True)
+

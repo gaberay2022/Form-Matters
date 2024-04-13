@@ -109,7 +109,7 @@
     <!-- JavaScript to update stats and create pie charts -->
     <script>
 
-        fetch('/get_file_contents')
+        fetch('/readname')
             .then(response => response.json())
             .then(data => {
                 if (data.error) {
@@ -208,7 +208,7 @@ function writedata(n,bt,r,h,w,a){
 function senddata(n,bt,r,h,w,a){
     writedata(n,bt,r,h,w,a)
     var dataToSend = {content: data}
-    fetch('/ModifySignUpfile', {
+    fetch('/ModifyUserfile', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

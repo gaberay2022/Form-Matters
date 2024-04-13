@@ -86,24 +86,28 @@
         async function predict(videoElement, model, metadata) {
             return tf.tidy(() => {
                 let tensor = tf.browser.fromPixels(videoElement)
-                    .resizeNearestNeighbor([224, 224]) // Adjust this size if necessary
+                    .resizeNearestNeighbor([224, 224])  // Resize if necessary
                     .toFloat()
                     .div(tf.scalar(127.5))
                     .sub(tf.scalar(1))
                     .expandDims();
 
-                // Reshape tensor to match the model's expected input shape, adjust as necessary
-                const totalElements = tensor.size;
-                if (totalElements !== 14739) {
-                    // Calculate the new dimensions
-                    const resizeFactor = Math.sqrt(14739 / totalElements);
-                    const newHeight = Math.round(tensor.shape[1] * resizeFactor);
-                    const newWidth = Math.round(tensor.shape[2] * resizeFactor);
-                    tensor = tensor.resizeNearestNeighbor([newHeight, newWidth]);
+                // Reshape or pad the tensor to fit the expected input shape of the model
+                let flattenedTensor = tensor.reshape([-1]); // Flatten the tensor
+                if (flattenedTensor.shape[0] > 14739) {
+                    // Slice the tensor to match the required input size
+                    flattenedTensor = flattenedTensor.slice([0], [14739]);
+                } else if (flattenedTensor.shape[0] < 14739) {
+                    // Pad the tensor if it's smaller than required
+                    const padding = 14739 - flattenedTensor.shape[0];
+                    const paddings = [[0, padding]]; // pad end of the tensor
+                    flattenedTensor = flattenedTensor.pad(paddings);
                 }
-                tensor = tensor.reshape([1, -1]); // Flatten the tensor
 
-                const predictions = model.predict(tensor).dataSync();
+                // Reshape to match the input shape of the model
+                flattenedTensor = flattenedTensor.reshape([1, 14739]);
+
+                const predictions = model.predict(flattenedTensor).dataSync();
                 if (metadata && metadata.labels) {
                     const predictedIndex = predictions.indexOf(Math.max(...predictions));
                     return metadata.labels[predictedIndex];
@@ -111,6 +115,7 @@
                 return predictions.map(p => p.toFixed(3)).join(', ');
             });
         }
+
 
 
     </script>
